@@ -1,11 +1,10 @@
-// 2) Replace your src/app/page.tsx with this (uses the components above)
-// NOTE: This uses Tailwind classes. If Tailwind isn't installed, tell me and I’ll give you a pure-CSS version.
-
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Button, Card, Field, Input, Notice, Select } from "@/components/ui";
+import { HIDER_DECK } from "@/lib/deck";
+
 
 type GameSize = "SMALL" | "MEDIUM" | "LARGE";
 type RoomRow = { id: string; code: string; game_size: GameSize };
@@ -22,23 +21,6 @@ function shuffle<T>(arr: T[]) {
   }
   return a;
 }
-
-const DEFAULT_DECK: string[] = [
-  "TIME_5",
-  "TIME_10",
-  "TIME_15",
-  "TIME_30",
-  "VETO",
-  "RANDOMIZE",
-  "DISCARD_1_DRAW_2",
-  "DISCARD_2_DRAW_3",
-  "DRAW_1_EXPAND_HAND",
-  "DUPLICATE",
-  "MOVE",
-  "CURSE_BRIDGE_TROLL",
-  "CURSE_DRAINED_BRAIN",
-  "CURSE_LUXURY_CAR",
-];
 
 export default function HomePage() {
   const [rooms, setRooms] = useState<RoomRow[]>([]);
@@ -121,7 +103,7 @@ export default function HomePage() {
       return;
     }
 
-    const shuffled = shuffle(DEFAULT_DECK);
+    const shuffled = shuffle(HIDER_DECK);
     const { error: deckErr } = await supabase.from("decks").insert({
       round_id: roundCreated.id,
       draw_pile: shuffled,
